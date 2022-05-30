@@ -1,0 +1,31 @@
+html(lang="ru")
+
+head
+	meta(name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+	meta(content="text/html; charset=UTF-8" http-equiv="Content-Type")
+	link(rel="stylesheet", href="./assets/reset.css")
+	link(rel="stylesheet", href="./index.less")
+	script(type="module", src="./index.js" async defer)
+
+body.darkside
+	databox 
+		//db#hypo_test_0 this text has to be visible in whitebox
+		databox#playerboard
+			db#size 4,4
+	blackbox 
+		bb#userscore
+		bb#heighscore
+		blackbox#playerboard
+			blackbox#tiles.hypo_test-0 [#pig, null, null, #i0]
+	whitebox 
+		whitebox#scoreboard
+			wb#usercore
+			wb#heighscore
+		whitebox#playerboard
+			whitebox#tiles.hypo_test-0 | thingy-pig | 0 | | 0 | thingy-i0  |
+		whitebox#controls
+			button restart
+	databox
+		db#version v1
+		db#timestamp 220530 20:10
+		db#comment first darkside implementation
