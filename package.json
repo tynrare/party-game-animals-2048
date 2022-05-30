@@ -4,8 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel src/index.pug --no-cache",
+    "build": "parcel build src/index.pug --no-cache --public-url= ./"
   },
   "author": "tynrare",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "parcel": "^2.6.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-less": "^2.6.0",
+    "@parcel/transformer-pug": "^2.6.0"
+  }
 }
