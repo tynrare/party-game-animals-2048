@@ -1,6 +1,8 @@
 @import './dust-220531.less';
 @import './darkside.less';
 
+// == clay 220531
+
 :root {
 	--color-0: #fff;
 	--color-1: #000;
@@ -18,43 +20,123 @@ html,
 body {
 	display: flex;
 	background-color: var(--color-0);
-	color: var(--color-1);
+	color: var(--color-2);
 }
 
-body.brightside {
-	margin: auto;
+body {
+	// --- dust 220531
 
-	flex-direction: column;
-
-	blackbox,
-	databox,
-	.hypo_test-0 {
-		display: none;
+	&.shade {
+		dust,
+		.dust {
+			font-family: 'Flow';
+		}
 	}
 
-	whitebox {
+	&.shade-0 {
+		.dust-0,
+		dust,
+		.dust {
+			font-family: 'Flow';
+		}
+	}
+}
+
+// == dust 220531
+
+.fancy {
+	color: var(--color-garbage);
+	animation: float 31.415s alternate ease-in-out infinite;
+
+	@keyframes float {
+		0% {
+			transform: translateX(0px);
+		}
+		100% {
+			transform: translateX(64px);
+		}
+	}
+}
+
+databox,
+blackbox {
+	--color-font: var(--color-0);
+	--color-back: var(--color-1);
+	background-color: var(--color-back);
+	color: var(--color-font);
+
+	&::before,
+	&::after {
+		--color-font: var(--color-2);
+	}
+}
+
+wb,
+whitebox {
+	--color-font: var(--color-1);
+	--color-back: var(--color-0);
+	color: var(--color-font);
+	background-color: var(--color-back);
+}
+
+.wired {
+	color: var(--color-4);
+
+	.uncommited {
+		color: var(--color-garbage);
+	}
+}
+
+body#d220531 {
+	background-color: var(--color-1);
+
+	whitebox,
+	databox,
+	blackbox {
 		display: flex;
 		flex-direction: column;
 
-		button {
-			&::before {
-				content: '▮.';
-			}
+		font-size: 0.8em;
+	}
 
-			font-weight: bold;
-			color: var(--color-0);
-			background-color: var(--color-4);
-			text-shadow: 1px 1px var(--color-2);
+	flex-direction: column;
+	gap: 10px;
 
-			width: 128px;
-			margin: 4px auto;
-			padding: 2px;
+	min-width: 512px;
+	padding: 0.5em;
 
-			user-select: none;
-			cursor: pointer;
-			&:hover {
-				letter-spacing: 0.1em;
-			}
+	button {
+		&::before {
+			content: '▮.';
+		}
+
+		font-weight: bold;
+		color: var(--color-0);
+		background-color: var(--color-4);
+		text-shadow: 1px 1px var(--color-2);
+
+		width: 128px;
+		margin: 4px auto;
+		padding: 2px;
+
+		user-select: none;
+		cursor: pointer;
+		&:hover {
+			letter-spacing: 0.1em;
 		}
 	}
+
+	// ---
+
+	@font-face {
+		font-family: 'Azeret';
+		src: url('./assets/AzeretMono.ttf');
+	}
+
+	@font-face {
+		font-family: 'Flow';
+		src: url('./assets/FlowRounded.ttf');
+	}
+
+	font-family: 'Azeret';
 }

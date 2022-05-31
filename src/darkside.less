@@ -1,136 +1,43 @@
 body.darkside {
-	databox,
-	blackbox,
-	whitebox {
-		display: flex;
-		flex-direction: column;
-	}
-
-	margin: auto;
-
-	flex-direction: column;
-	gap: 10px;
-
-	min-width: 512px;
-	padding: 0.5em;
-
-	background-color: var(--color-1);
-	color: var(--color-0);
-
-	& .hypo_test-0 {
-		background-color: var(--color-3);
-		padding: 4px;
-	}
-
-	button {
-		&::before {
-			content: '▮.';
-		}
-
-		border-bottom: 1px solid var(--color-2);
-		width: 128px;
-
-		user-select: none;
-		cursor: pointer;
-		&:hover {
-			letter-spacing: 0.1em;
-		}
-	}
-
-	// ---
-
-	@font-face {
-		font-family: 'Azeret';
-		src: url('./assets/AzeretMono.ttf');
-	}
-
-	font-family: 'Azeret';
-}
-
-body.darkside {
-	.wired {
-		& > * {
-			color: var(--color-2);
-		}
-
-		& .wired {
-			color: var(--color-0);
-		}
-
-		.uncommited {
-			&,
-			&::before {
-				color: var(--color-garbage);
-			}
-		}
-	}
-}
-
-body.light-0 {
-	databox,
-	blackbox,
-	whitebox {
-		margin-left: 0.3em;
-		display: flex;
-		flex-direction: column;
-
-		font-size: 0.8em;
-	}
-
-	databox,
-	blackbox,
-	whitebox {
-		margin-top: 1em;
-
-		&::before {
-			margin-left: -0.3em;
-			font-size: 1.5em;
-			letter-spacing: 0.5em;
-		}
-		&[id]::before {
-			content: attr(id) ' ';
-		}
-	}
-
 	db,
 	bb,
-	wb {
-		&::before {
-			color: var(--color-2);
-		}
-		&[id]::before {
-			content: attr(id) ' ';
-		}
-	}
-
+	wb,
+	databox,
+	blackbox,
+	whitebox,
 	dust {
-		&::before, &::after {
-			color: var(--color-4);
+		padding: 2px 4px;
+
+		&::before,
+		&::after {
+			color: var(--color-font);
 		}
 		&[id]::before {
 			content: attr(id) '(';
 		}
 		&[id]::after {
-			content: '),';
+			content: ')';
 		}
 	}
 
-	databox,
-	db {
-		&::before {
-			content: 'db▮ ';
-		}
+	databox::before {
+		letter-spacing: 2px;
+		font-size: 1.2em;
+		content: 'db▮ ';
 	}
-	blackbox,
-	bb {
-		&::before {
-			content: 'bb▮ ';
-		}
+	blackbox::before {
+		letter-spacing: 2px;
+		font-size: 1.2em;
+		content: 'bb▮ ';
 	}
-	whitebox,
-	wb {
-		&::before {
-			content: 'wb▮ ';
+	whitebox::before {
+		content: 'wb▮ ';
+	}
+
+	dust {
+		&::before,
+		&::after {
+			color: inherit;
 		}
 	}
 }

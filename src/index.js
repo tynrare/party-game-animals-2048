@@ -53,18 +53,18 @@ class Databox {
 
 	// --
 
-	pull() {
-		const asText = this.db.innerHTML;
+	pull(databox = this) {
+		const asText = databox.db.innerHTML;
 		const asNumber = this.toNumber(asText);
 		this.value = asNumber ? asText : asNumber;
-		for (const k in this.cache) {
+		for (const k in databox.cache) {
 			const box = this.cache[k];
 
 			// reinit old pointers with new data
 			delete this.cache[k];
 			this.get(k, box);
 
-			box.pull();
+			box.pull(databox.get(k));
 		}
 	}
 
@@ -131,7 +131,7 @@ class Databox {
 	forsure(key, dflt) {
 		let box = this.get(key);
 		if (box === null) {
-			box = this.append(key, dflt);
+			box = this.prepend(key, dflt);
 		}
 
 		return box;
@@ -160,6 +160,15 @@ function stdout(output, text) {
 	output.push();
 }
 
+function graph_1D(value) {
+	const graphlen = 10;
+	const steppos = Math.round(value) % graphlen;
+	const graph = '-'.repeat(steppos) + '▮' + '-'.repeat(graphlen - steppos - 1);
+	const fullgraph = `[x${Math.floor(value / 10)}]~[${graph}]`;
+
+	return fullgraph;
+}
+
 class D220531 {
 	constructor() {
 		this.cache = {
@@ -168,11 +177,11 @@ class D220531 {
 	}
 
 	init() {
-		this.db = new Databox(document.querySelector('#d220531 databox')).init();
-		this.bb = new Databox(document.querySelector('#d220531 blackbox')).init();
-		this.wb = new Databox(document.querySelector('#d220531 whitebox')).init();
-		this.print = new Databox(document.querySelector('#devlog #print')).init();
-		this.inventory = this.bb.get('inventory');
+		this.db = new Databox(document.querySelector('databox')).init();
+		this.bb = new Databox(document.querySelector('blackbox')).init();
+		this.wb = new Databox(document.querySelector('whitebox')).init();
+		this.print = new Databox(document.querySelector('wb#print')).init();
+		this.table = this.bb.get('table');
 
 		return this;
 	}
@@ -185,18 +194,17 @@ class D220531 {
 	}
 
 	run() {
-		this.inventory.get('step').commit(0);
-		this.inventory.forsure('random', this.db.get('seed'));
+		this.table.get('step').commit(0);
+		this.table.forsure('rand', this.db.get('seed'));
 
 		this.on('step', () => this.step());
 
-		this.on('click step', () => this.event('step'));
-		this.on('click undo', () => {
-			this.inventory.push(this.bb.get('stamp'));
-			this.inventory.pull();
-			this.write(step);
+		this.on('click:step', () => this.event('step'));
+		this.on('click:undo', () => {
+			this.table.pull(this.bb.get('stamp'));
+			this.write();
 		});
-		this.on('click restart', () => {
+		this.on('click:restart', () => {
 			this.dispose();
 			this.init();
 			this.run();
@@ -213,39 +221,35 @@ class D220531 {
 	}
 
 	stdin(type, key) {
-		this.event(`${type} ${key}`);
+		this.event(`${type}:${key}`);
 	}
 
 	step() {
-		const step = this.inventory.get('step');
-		const random = this.inventory.get('random');
-		random.commit(new Alea(random.toNumber()).next());
+		const step = this.table.get('step');
+		const rand = this.table.get('rand');
+		rand.commit(new Alea(rand.toNumber()).next());
 
 		step.commit(step.toNumber() + 1);
 		this.write(step);
 	}
 
 	write() {
-		const step = this.inventory.get('step').toNumber();
-		const graphlen = 10;
-		const steppos = step % graphlen;
-		const graph = '-'.repeat(steppos) + '▮' + '-'.repeat(9 - steppos);
-		const wbstep = `[x${Math.floor(step / 10)}]~[${graph}]`;
+		const step = this.table.get('step').toNumber();
+		const rand = this.table.get('rand').toNumber();
 
-		this.wb.get('step').commit(wbstep);
+		this.wb.get('step').commit(graph_1D(step));
+		this.wb.get('rand').commit(graph_1D(rand * 100));
 
 		this.serialize();
 
 		this.push();
-
-		return wbstep;
 	}
 
 	// --
 
 	serialize() {
 		const stamp = this.bb.forsure('stamp');
-		this.inventory.stamp(stamp);
+		this.table.stamp(stamp);
 
 		return stamp;
 	}
@@ -276,8 +280,8 @@ class D220531 {
 	}
 }
 
-function main() {
-	const error = new Databox(document.querySelector('whitebox #error')).init();
+function d220531() {
+	const error = new Databox(document.querySelector('wb#error')).init();
 	try {
 		const box = new D220531().init().run();
 		document.addEventListener('click', (e) => {
@@ -290,6 +294,22 @@ function main() {
 	} catch (err) {
 		stdout(error, err.message);
 	}
+}
+
+function time(t = new Date()) {
+	//return `${t.getYear()}${t.getMonth()}${t.getDay()} ${t.getHours()}${t.getMinutes()}`;
+	return t.toString();
+}
+
+function main() {
+	d220531();
+
+	const timestamp = new Databox(document.querySelector('databox#legs #timestamp')).init();
+
+	setInterval(() => {
+		timestamp.commit(time());
+		timestamp.push();
+	}, 31141.5);
 }
 
 if (document.readyState == 'loading') {
