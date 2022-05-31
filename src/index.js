@@ -14,7 +14,7 @@ class Databox {
 	get(key, boxpointer) {
 		let childbox = this.cache[key];
 		if (!childbox) {
-			const childdb = this.db.querySelector('#' + key);
+			const childdb = this.db.querySelector(':scope > #' + key);
 			if (!childdb) {
 				return null;
 			}
@@ -31,8 +31,6 @@ class Databox {
 	init(db = this.db) {
 		this.db = db;
 
-		this.dispose();
-
 		this.db.classList.add('wired');
 		this.guids = 0;
 		this.pull();
@@ -42,11 +40,18 @@ class Databox {
 
 	dispose() {
 		this.db.classList.remove('wired');
+		this.db.classList.remove('uncommited');
 		for (const k in this.cache) {
 			this.cache[k].dispose();
 			delete this.cache[k];
 		}
+
+		if (this.db.tagName === 'DUST') {
+			this.db.parentNode.removeChild(this.db);
+		}
 	}
+
+	// --
 
 	pull() {
 		const asText = this.db.innerHTML;
@@ -67,16 +72,16 @@ class Databox {
 		this.value = value;
 		this.db.classList.add('uncommited');
 
-		return this.value;
+		return this;
 	}
 
-	push() {
+	push(databox = this) {
 		if (this.guids) {
 			for (const k in this.cache) {
-				this.cache[k].push();
+				this.cache[k].push(databox.get(k));
 			}
 		} else {
-			this.db.innerHTML = this.value;
+			this.db.innerHTML = databox.value;
 		}
 
 		this.db.classList.remove('uncommited');
@@ -84,9 +89,25 @@ class Databox {
 
 	// --
 
+	stamp(databox) {
+		if (this.db.classList.contains('uncommited')) {
+			databox.commit(this.db.innerHTML);
+		}
+
+		for (const k in this.cache) {
+			const box = this.cache[k];
+			if (box.db.classList.contains('uncommited')) {
+				box.stamp(databox.forsure(k));
+			}
+		}
+	}
+
+	// --
+
 	append(key, value = '') {
 		const d = document.createElement('dust');
 		d.id = key;
+		d.innerHTML = value;
 		this.db.appendChild(d);
 
 		const box = this.get(key);
@@ -98,6 +119,7 @@ class Databox {
 	prepend(key, value = '') {
 		const d = document.createElement('dust');
 		d.id = key;
+		d.innerHTML = value;
 		this.db.insertBefore(d, this.db.firstChild);
 
 		const box = this.get(key);
@@ -150,20 +172,36 @@ class D220531 {
 		this.bb = new Databox(document.querySelector('#d220531 blackbox')).init();
 		this.wb = new Databox(document.querySelector('#d220531 whitebox')).init();
 		this.print = new Databox(document.querySelector('#devlog #print')).init();
+		this.inventory = this.bb.get('inventory');
 
 		return this;
 	}
 
-	run() {
-		//this.step();
+	dispose() {
+		this.db.dispose();
+		this.bb.dispose();
+		this.wb.dispose();
+		this.print.dispose();
+	}
 
-		this.on('step', () => {
-			const random = this.bb.forsure('random', this.db.get('seed'));
-			random.commit(new Alea(random.toNumber()).next());
-		});
+	run() {
+		this.inventory.get('step').commit(0);
+		this.inventory.forsure('random', this.db.get('seed'));
+
 		this.on('step', () => this.step());
 
 		this.on('click step', () => this.event('step'));
+		this.on('click undo', () => {
+			this.inventory.push(this.bb.get('stamp'));
+			this.inventory.pull();
+		});
+		this.on('click restart', () => {
+			this.dispose();
+			this.init();
+			this.run();
+		});
+
+		this.event('step');
 
 		return this;
 	}
@@ -178,14 +216,17 @@ class D220531 {
 	}
 
 	step() {
-		const step = this.bb.get('step').toNumber() + 1;
+		const step = this.inventory.get('step').toNumber() + 1;
 
-		this.bb.get('step').commit(step);
+		const random = this.inventory.get('random');
+		random.commit(new Alea(random.toNumber()).next());
+
+		this.inventory.get('step').commit(step);
 		this.wb.get('step').commit(this.draw(step));
 
-		this.push();
+		this.serialize();
 
-		stdout(this.print, `step: ${step}, seed: ${this.db.get('seed')}`);
+		this.push();
 	}
 
 	draw(step) {
@@ -199,11 +240,20 @@ class D220531 {
 
 	// --
 
-	on(type, callback) {
-		const guids = this.bb.forsure('guids', 0);
-		const events = this.bb.forsure('events');
+	serialize() {
+		const stamp = this.bb.forsure('stamp');
+		this.inventory.stamp(stamp);
 
-		const guid = guids.commit(guids.toNumber() + 1);
+		return stamp;
+	}
+
+	// --
+
+	on(type, callback) {
+		const events = this.bb.forsure('events');
+		const guids = events.forsure('guids', 0);
+
+		const guid = guids.commit(guids.toNumber() + 1).value;
 		const key = 'evt_' + guid;
 		events.append(key, type);
 		this.cache.listeners[key] = callback;
@@ -213,7 +263,6 @@ class D220531 {
 	}
 
 	event(key) {
-		stdout(this.print, key);
 		const events = this.bb.forsure('events');
 
 		for (const k in this.cache.listeners) {

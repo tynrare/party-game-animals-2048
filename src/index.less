@@ -6,7 +6,7 @@
 	--color-1: #000;
 	--color-2: #777;
 	--color-3: #123;
-	--color-4: #bad;
+	--color-4: #0ad;
 	--color-garbage: #f0f;
 }
 
@@ -21,33 +21,40 @@ body {
 	color: var(--color-1);
 }
 
-.wired {
-	& > * {
-		color: var(--color-2);
-	}
-
-	& > .wired {
-		color: var(--color-0);
-	}
-
-	*.uncommited {
-		&,
-		&::before {
-			color: var(--color-garbage);
-		}
-	}
-}
-
 body.brightside {
 	margin: auto;
 
 	flex-direction: column;
 
 	blackbox,
-	databox {
+	databox,
+	.hypo_test-0 {
 		display: none;
 	}
 
 	whitebox {
+		display: flex;
+		flex-direction: column;
+
+		button {
+			&::before {
+				content: '▮.';
+			}
+
+			font-weight: bold;
+			color: var(--color-0);
+			background-color: var(--color-4);
+			text-shadow: 1px 1px var(--color-2);
+
+			width: 128px;
+			margin: 4px auto;
+			padding: 2px;
+
+			user-select: none;
+			cursor: pointer;
+			&:hover {
+				letter-spacing: 0.1em;
+			}
+		}
 	}
 }

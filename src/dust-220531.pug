@@ -5,9 +5,8 @@ databox
 		db#size 4,4
 
 blackbox
-	bb#step 0
-	bb#userscore
-	bb#heighscore
+	blackbox#inventory
+		bb#step 0
 	blackbox#playerboard
 		blackbox#tiles.hypo_test-0 [#pig, null, null, #i0]
 
@@ -20,5 +19,5 @@ whitebox
 		whitebox#tiles.hypo_test-0 | thingy-pig | 0 | | 0 | thingy-i0  |
 	whitebox#controls
 		button#step.button(direction=1) next step
-		button#step.button(direction=-1) prev step
+		button#undo.button(direction=-1) undo
 		button#restart restart

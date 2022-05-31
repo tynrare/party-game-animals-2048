@@ -47,6 +47,25 @@ body.darkside {
 	font-family: 'Azeret';
 }
 
+body.darkside {
+	.wired {
+		& > * {
+			color: var(--color-2);
+		}
+
+		& .wired {
+			color: var(--color-0);
+		}
+
+		.uncommited {
+			&,
+			&::before {
+				color: var(--color-garbage);
+			}
+		}
+	}
+}
+
 body.light-0 {
 	databox,
 	blackbox,
@@ -85,11 +104,14 @@ body.light-0 {
 	}
 
 	dust {
-		&::before {
+		&::before, &::after {
 			color: var(--color-4);
 		}
 		&[id]::before {
-			content: '|-' attr(id) ' ';
+			content: attr(id) '(';
+		}
+		&[id]::after {
+			content: '),';
 		}
 	}
 
