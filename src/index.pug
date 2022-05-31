@@ -7,25 +7,12 @@ head
 	link(rel="stylesheet", href="./index.less")
 	script(type="module", src="./index.js" async defer)
 
-body.darkside
-	databox 
-		//db#hypo_test_0 this text has to be visible in whitebox
-		databox#playerboard
-			db#size 4,4
-	blackbox 
-		bb#userscore
-		bb#heighscore
-		blackbox#playerboard
-			blackbox#tiles.hypo_test-0 [#pig, null, null, #i0]
-	whitebox 
-		whitebox#scoreboard
-			wb#usercore
-			wb#heighscore
-		whitebox#playerboard
-			whitebox#tiles.hypo_test-0 | thingy-pig | 0 | | 0 | thingy-i0  |
-		whitebox#controls
-			button restart
-	databox
-		db#version v1
-		db#timestamp 220530 20:10
-		db#comment first darkside implementation
+body.darkside.light-0
+	#d220531.wired: include dust-220531
+	whitebox#devlog
+		wb#error
+		wb#print
+	databox#legs ▮▮▮
+		db#version v2
+		db#timestamp 220531 02:12
+		db#comment заработал step, отрисовка. Нужно добавлять систему эвентов

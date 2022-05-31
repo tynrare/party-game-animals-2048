@@ -1,0 +1,24 @@
+databox
+	db#seed 0
+	//db#hypo_test_0 this text has to be visible in whitebox
+	databox#playerboard
+		db#size 4,4
+
+blackbox
+	bb#step 0
+	bb#userscore
+	bb#heighscore
+	blackbox#playerboard
+		blackbox#tiles.hypo_test-0 [#pig, null, null, #i0]
+
+whitebox
+	wb#step [▮-------------]
+	whitebox#scoreboar
+		wb#usercore
+		wb#heighscore
+	whitebox#playerboard
+		whitebox#tiles.hypo_test-0 | thingy-pig | 0 | | 0 | thingy-i0  |
+	whitebox#controls
+		button#step.button(direction=1) next step
+		button#step.button(direction=-1) prev step
+		button#restart restart
