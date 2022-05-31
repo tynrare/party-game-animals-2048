@@ -29,6 +29,12 @@ body.darkside {
 
 		border-bottom: 1px solid var(--color-2);
 		width: 128px;
+
+		user-select: none;
+		cursor: pointer;
+		&:hover {
+			letter-spacing: 0.1em;
+		}
 	}
 
 	// ---
@@ -75,6 +81,15 @@ body.light-0 {
 		}
 		&[id]::before {
 			content: attr(id) ' ';
+		}
+	}
+
+	dust {
+		&::before {
+			color: var(--color-4);
+		}
+		&[id]::before {
+			content: '|-' attr(id) ' ';
 		}
 	}
 
