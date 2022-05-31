@@ -194,6 +194,7 @@ class D220531 {
 		this.on('click undo', () => {
 			this.inventory.push(this.bb.get('stamp'));
 			this.inventory.pull();
+			this.write(step);
 		});
 		this.on('click restart', () => {
 			this.dispose();
@@ -216,24 +217,26 @@ class D220531 {
 	}
 
 	step() {
-		const step = this.inventory.get('step').toNumber() + 1;
-
+		const step = this.inventory.get('step');
 		const random = this.inventory.get('random');
 		random.commit(new Alea(random.toNumber()).next());
 
-		this.inventory.get('step').commit(step);
-		this.wb.get('step').commit(this.draw(step));
-
-		this.serialize();
-
-		this.push();
+		step.commit(step.toNumber() + 1);
+		this.write(step);
 	}
 
-	draw(step) {
+	write() {
+		const step = this.inventory.get('step').toNumber();
 		const graphlen = 10;
 		const steppos = step % graphlen;
 		const graph = '-'.repeat(steppos) + '▮' + '-'.repeat(9 - steppos);
 		const wbstep = `[x${Math.floor(step / 10)}]~[${graph}]`;
+
+		this.wb.get('step').commit(wbstep);
+
+		this.serialize();
+
+		this.push();
 
 		return wbstep;
 	}
