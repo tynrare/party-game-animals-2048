@@ -1,0 +1,31 @@
+whitebox
+	whitebox#step [x0]~[▮---------]
+	whitebox#rand [x0]~[▮---------]
+	wb#scoreboard
+		whitebox#userscore
+		whitebox#heighscore
+	dust#playerboard
+		whitebox#tiles | thingy-pig | 0 | | 0 | thingy-i0  |
+whitebox#controls
+	button#step.button step
+	button#undo.button undo
+	button#restart restart
+
+blackbox
+	bb#table
+		blackbox#step 0
+		blackbox#rand 0
+	dust#board
+		whitebox#tiles [#pig, null, null, #i0]
+
+databox#d220531.dust
+	databox#seed 0
+	databox#boardsize 4,4
+
+bb#stdout.dust-0
+	blackbox#error
+	blackbox#print
+db#legs.dust-0
+	databox#version v5
+	databox#timestamp 220531 10:48
+	db#comment.fancy `|- timetravel ` 2048.

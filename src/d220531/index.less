@@ -1,0 +1,146 @@
+#d220531 {
+
+	// darkside
+	background-color: var(--color-1);
+
+	databox::before {
+		letter-spacing: 2px;
+		content: 'db▮ ';
+	}
+	blackbox::before {
+		letter-spacing: 2px;
+		content: 'bb▮ ';
+	}
+	whitebox::before {
+		content: 'wb▮ ';
+	}
+
+
+
+	dust {
+		&::before,
+		&::after {
+			color: inherit;
+		}
+	}
+	&.shade {
+		.dust-0,
+		dust,
+		.dust {
+			font-family: 'Flow';
+		}
+	}
+
+	// == dust 220531
+
+	.fancy {
+		color: var(--color-garbage);
+		animation: float 31.415s alternate ease-in-out infinite;
+
+		@keyframes float {
+			0% {
+				transform: translateX(0px);
+			}
+			100% {
+				transform: translateX(64px);
+			}
+		}
+	}
+
+	&,
+	databox,
+	blackbox {
+		--color-font: var(--color-0);
+		--color-back: var(--color-1);
+		background-color: var(--color-back);
+		color: var(--color-font);
+
+		&::before,
+		&::after {
+			--color-font: var(--color-2);
+		}
+	}
+
+	wb,
+	whitebox {
+		--color-font: var(--color-1);
+		--color-back: var(--color-0);
+		color: var(--color-font);
+		background-color: var(--color-back);
+	}
+
+	.wired {
+		color: var(--color-4);
+
+		.uncommited {
+			color: var(--color-garbage);
+		}
+	}
+
+	&,
+	wb,
+	db,
+	bb {
+		display: flex;
+		flex-direction: column;
+	}
+
+	flex-direction: column;
+
+	gap: 4px;
+	//min-width: 512px;
+	//padding: 0.5em;
+
+	databox,
+	blackbox,
+	whitebox,
+	dust {
+		padding: 2px 4px;
+
+		&::before,
+		&::after {
+			color: var(--color-font);
+		}
+		&[id]::before {
+			content: attr(id) '(';
+		}
+		&[id]::after {
+			content: ')';
+		}
+	}
+
+	button {
+		&::before {
+			content: '▮.';
+		}
+
+		font-weight: bold;
+		color: var(--color-0);
+		background-color: var(--color-4);
+		text-shadow: 1px 1px var(--color-2);
+
+		width: 128px;
+		margin: 4px auto;
+		padding: 2px;
+
+		user-select: none;
+		cursor: pointer;
+		&:hover {
+			letter-spacing: 0.1em;
+		}
+	}
+
+	// ---
+
+	@font-face {
+		font-family: 'Azeret';
+		src: url('../assets/AzeretMono.ttf');
+	}
+
+	@font-face {
+		font-family: 'Flow';
+		src: url('../assets/FlowRounded.ttf');
+	}
+
+	font-family: 'Azeret';
+}
