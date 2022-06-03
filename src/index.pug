@@ -8,16 +8,20 @@ head
 	script(type="module", src="./index.js" async defer)
 	title dust ▮
 	
-body
+body.shade
 	canvas#webgl-220603
 
-	bb#d220531.shade.collapse: include d220531/index.pug
+	bb#d220531.shade: include d220531/index.pug
 	
 	darkbox#tilemap
 		brightbox
-			bb#tiles ▮|▮|▮|▮
-			bb#tiles ▮|▮|▮|▮
-			bb#tiles ▮|▮|▮|▮
-			bb#tiles ▮|▮|▮|▮
+			bb#tiles _|_|_|_
+			bb#tiles _|_|_|_
+			bb#tiles _|_|_|_
+			bb#tiles _|_|_|_
 		darkbox
-			db#dimensions 4,4,4
+			db#dimensions 4,4
+
+	darkbox#credits.dust
+		db#version v1
+		db#timestamp 220603 02:33
